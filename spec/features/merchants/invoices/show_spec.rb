@@ -133,8 +133,7 @@ RSpec.describe 'Merchant Invoices Index' do
         end
         within "#discounted" do
           within "#invoice_item-#{@bowl.id}" do
-            expect(page).to have_link(@bulk_discount1.id)
-            click_link(@bulk_discount1.id)
+            click_link("#{@bulk_discount1.id}")
             expect(current_path).to eq(merchant_bulk_discount_path(@merchant.id, @bulk_discount1.id))
           end
         end

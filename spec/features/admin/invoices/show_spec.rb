@@ -11,6 +11,8 @@ describe "Admin Invoice Show Page" do
         @bowl = @merchant.items.create!(name: "bowl", description: "it's a bowl", unit_price: 350) 
         @knife = @merchant.items.create!(name: "knife", description: "it's a knife", unit_price: 250) 
 
+        @bulk_discount = @merchant.bulk_discounts.create!(percentage_discount: 0.2, quantity_threshold: 10, name: 'test')
+
         @invit1 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 10 , unit_price: 2222)
         @invit2 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 1, unit_price: 6654)
         @invit3 = InvoiceItem.create!(item_id: @bowl.id, invoice_id: @inv1.id, status: 2, quantity: 4, unit_price: 8765)
@@ -20,8 +22,7 @@ describe "Admin Invoice Show Page" do
         visit "/admin/invoices/#{@inv1.id}"
       end
       describe 'I see information related to that invoice including' do
-        
-
+      
         it 'Invoice ID' do
           expect(page).to have_content(@inv1.id)
         end
@@ -145,6 +146,13 @@ describe "Admin Invoice Show Page" do
 
           expect(page).to have_select("invoice[status]", selected: "cancelled")
           expect(page).to have_content('Invoice Status has been updated successfully')
+        end
+      end
+
+      describe 'I see the total discounted revenue that will be generated from this invoice' do
+        it 'has a discounted total revenue' do
+          save_and_open_page
+          expect(page).to have_content("Total Discounted Revenue: $809.24")
         end
       end
     end
