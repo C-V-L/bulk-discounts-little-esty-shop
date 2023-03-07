@@ -224,6 +224,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    syntax_suggest (1.0.2)
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.1.0)
@@ -273,6 +274,7 @@ DEPENDENCIES
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
+  syntax_suggest
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)

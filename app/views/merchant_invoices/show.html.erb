@@ -5,26 +5,48 @@
 <p>Customer: <%=@invoice.customer.first_name %> <%= @invoice.customer.last_name %></p>
 <br>
 
+<div id='no-discount'>
+<% @invoice_items.each do |ii| %>
+  <% unless @invoice_items_with_discounts.include?(ii) %>
+  <div id="invoice_item-<%= ii.item.id %>">
+    <p> Item: <%= ii.item.name %></p>
+    <p> Quantity: <%= ii.quantity %></p>
+    <p> Price: $<%= sprintf("%.2f", (ii.unit_price/100.00))%></p>
 
-<% @invoice.invoice_items.each do |ii| %>
-<div id="invoice_item-<%= ii.item.id %>">
-	<p> Item: <%= ii.item.name %></p>
-	<p> Quantity: <%= ii.quantity %></p>
-	<p> Price: $<%= sprintf("%.2f", (ii.unit_price/100.00))%></p>
-
-  <%= form_with model: ii, url: [ii] do |f| %>
-    <h2>Invoice Item Status: <%= f.select(:status, InvoiceItem.statuses.keys, selected: "#{ii.status}") %>
-    <%= f.hidden_field :invoice_id, value: @invoice.id %>
-    <%= f.hidden_field :merchant_id, value: @merchant.id %>
-    <%= f.submit 'Update Item Status'%><br>
-    <%= ii.status %>
-  <%end%> 
-</h2>	
-<br>
-</div>
+    <%= form_with model: ii, url: [ii] do |f| %>
+      <h2>Invoice Item Status: <%= f.select(:status, InvoiceItem.statuses.keys, selected: "#{ii.status}") %>
+      <%= f.hidden_field :invoice_id, value: @invoice.id %>
+      <%= f.hidden_field :merchant_id, value: @merchant.id %>
+      <%= f.submit 'Update Item Status'%><br>
+      <%= ii.status %>
+      </h2>	
+    <% end %> 
+  <% end %>
+  <br>
+  </div>
 <% end %>
+</div>
+
+<div id='discounted'>
+<% @invoice_items_with_discounts.each do |ii| %>
+  <div id="invoice_item-<%= ii.item.id %>">
+    <p> Item: <%= ii.item.name %></p>
+    <p> Quantity: <%= ii.quantity %></p>
+    <p> Price: $<%= sprintf("%.2f", (ii.unit_price/100.00))%></p>
+    Discount Applied: <%= link_to "#{ii.bulk_discount_id}", "/merchants/#{@merchant.id}/bulk_discounts/#{ii.bulk_discount_id}", method: :get %>
+
+    <%= form_with model: ii, url: [ii] do |f| %>
+      <h2>Invoice Item Status: <%= f.select(:status, InvoiceItem.statuses.keys, selected: "#{ii.status}") %>
+      <%= f.hidden_field :invoice_id, value: @invoice.id %>
+      <%= f.hidden_field :merchant_id, value: @merchant.id %>
+      <%= f.submit 'Update Item Status'%><br>
+      <%= ii.status %>
+    <%end%> 
+  </div>
+  </h2>	
+  <br>
+<% end %>
+</div>
 
 <p> Total Revenue: $<%= sprintf("%.2f", (@total_revenue/100.00))%></p>
 <p> Total Discounted Revenue: $<%= sprintf("%.2f", (@discounted_revenue/100)) %> </p>
-
-

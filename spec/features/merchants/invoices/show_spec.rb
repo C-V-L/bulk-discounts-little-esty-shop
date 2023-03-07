@@ -66,7 +66,6 @@ RSpec.describe 'Merchant Invoices Index' do
 				expect(page).to have_content("Total Revenue: $112.00")				
 		end
 
-		############################US18####################################
 		describe 'user_story_18' do
 			before :each do
 				visit merchant_invoice_path(@merchant.id, @inv1.id)
@@ -117,7 +116,7 @@ RSpec.describe 'Merchant Invoices Index' do
 			end
 		end
 
-    describe 'bulk_discounts US_6' do
+    describe 'bulk_discounts' do
       before :each do
         @bulk_discount1 = @merchant.bulk_discounts.create!(name: "10% off 10 items", percentage_discount: 0.10, quantity_threshold: 10)
 				visit merchant_invoice_path(@merchant.id, @inv1.id)
@@ -126,6 +125,19 @@ RSpec.describe 'Merchant Invoices Index' do
       it 'I see the total discounted revenue for my merchant from this invoice' do 
         expect(page).to have_content("Total Revenue: $56.00")
         expect(page).to have_content("Total Discounted Revenue: $52.50")
+      end
+
+      it 'next to each invoice item I see a link the bulk discount that was applied (if any)' do
+        within "#no-discount" do
+          expect(page).to_not have_content "Discount Applied:"
+        end
+        within "#discounted" do
+          within "#invoice_item-#{@bowl.id}" do
+            expect(page).to have_link(@bulk_discount1.id)
+            click_link(@bulk_discount1.id)
+            expect(current_path).to eq(merchant_bulk_discount_path(@merchant.id, @bulk_discount1.id))
+          end
+        end
       end
     end
 	end
