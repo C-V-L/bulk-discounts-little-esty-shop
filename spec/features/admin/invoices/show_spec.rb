@@ -151,7 +151,6 @@ describe "Admin Invoice Show Page" do
 
       describe 'I see the total discounted revenue that will be generated from this invoice' do
         it 'has a discounted total revenue' do
-          save_and_open_page
           expect(page).to have_content("Total Discounted Revenue: $809.24")
         end
       end

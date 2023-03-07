@@ -57,5 +57,11 @@ RSpec.describe 'Merchant Bulk Discount Index' do
 
       expect(page).to_not have_content @bogo.name
     end
+
+    it 'lists the next three upcoming US holidays' do
+      expect(page).to have_content("Upcoming Holidays:")
+      expect("Good Friday, 2023-04-07").to appear_before("Memorial Day, 2023-05-29")
+      expect("Memorial Day").to appear_before("Juneteenth, 2023-06-19")
+    end
 	end
 end

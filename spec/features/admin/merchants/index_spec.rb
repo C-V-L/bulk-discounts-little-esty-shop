@@ -84,13 +84,13 @@ RSpec.describe '#index' do
     end
 
 
-    xit 'I see the date with the most revenue for each merchant' do
+    it 'I see the date with the most revenue for each merchant' do
       load_test_data
       visit "/admin/merchants"
       
       within '#top-5-merchants' do
         within "#id-#{@merchant1.id}" do
-          expect(page).to have_content("Top selling date for #{@merchant1.name} was Thursday, March 2, 2023")
+          expect(page).to have_content("Top selling date for #{@merchant1.name} was Tuesday, March 7, 2023")
         end
       end
     end
